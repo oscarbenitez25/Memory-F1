@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memory F1 · Pit Stop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== PANTALLA D'INICI ===== -->
+  <main id="pantalla-inici" class="pantalla menu">
+    <h1>Memory <span>F1</span></h1>
+    <div class="semafor" aria-hidden="true">
+      <i class="llum"></i><i class="llum"></i><i class="llum"></i><i class="llum"></i><i class="llum"></i>
+    </div>
+    <p class="subtitol">Troba totes les parelles abans que s'acabi el temps.</p>
+    <nav class="menu-botons" aria-label="Menú principal">
+      <button id="menu-jugar" class="btn-menu btn-menu-principal">🏁 Jugar</button>
+      <button id="menu-logros" class="btn-menu">🏆 Assoliments <small id="menu-logros-comptador"></small></button>
+      <button id="menu-classificacions" class="btn-menu">📊 Classificacions</button>
+    </nav>
+    <button id="btn-so-menu" class="btn-so" aria-pressed="false" aria-label="Silencia els sons" title="Silencia els sons">🔊</button>
+    </main>
+
+  <!-- ===== PANTALLA D'ASSOLIMENTS ===== -->
+  <main id="pantalla-logros" class="pantalla" hidden>
+    <h1>Assoli<span>ments</span></h1>
+    <p id="resum-logros" class="subtitol"></p>
+    <div class="progres-global" role="progressbar" aria-label="Progrés global d'assoliments" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="progres-global-barra"><div id="progres-global-omplert"></div></div>
+      <strong id="progres-global-text">0%</strong>
+    </div>
+    <div id="llista-logros"></div>
+    <div class="botons">
+      <button class="btn-secundari btn-tornar-menu">← Menú</button>
+      <button id="btn-esborrar" class="btn-secundari btn-perill">Esborra tot el progrés</button>
+    </div>
+  </main>
+
+  <!-- ===== PANTALLA DE CLASSIFICACIONS ===== -->
+  <main id="pantalla-classificacions" class="pantalla" hidden>
+    <h1>Classifi<span>cacions</span></h1>
+    <p class="subtitol">Els 10 millors temps de cada nivell.</p>
+    <div id="pestanyes-nivells" class="pestanyes" role="tablist" aria-label="Nivell"></div>
+    <div class="taula-classificacio-wrap">
+      <table class="taula-classificacio">
+        <thead><tr><th>#</th><th>Temps</th><th>Intents</th></tr></thead>
+        <tbody id="llista-classificacions"></tbody>
+      </table>
+    </div>
+    <div class="botons">
+      <button class="btn-secundari btn-tornar-menu">← Menú</button>
+    </div>
+  </main>
+
+
+  <!-- ===== PANTALLA DE JOC ===== -->
+  <main id="pantalla-joc" class="pantalla joc" hidden>
+    <h1>Memory <span>F1</span></h1>
+
+    <!-- Semàfor de sortida: 5 llums que s'encenen en iniciar la partida -->
+    <div class="semafor" aria-hidden="true">
+      <i class="llum"></i><i class="llum"></i><i class="llum"></i><i class="llum"></i><i class="llum"></i>
+    </div>
+
+    <!-- Marcador: temps, intents, parelles i rècord -->
+    <section class="marcador" aria-live="polite">
+      <p>Temps <strong id="temps">--:--</strong></p>
+      <p>Intents <strong id="intents">0</strong></p>
+      <p>Parelles <strong id="parelles">0 / 12</strong></p>
+      <p>Rècord <strong id="record">--</strong></p>
+    </section>
+
+    <div class="barra"><div id="barra-progres"></div></div>
+    <p id="missatge" class="missatge">Prem «Inicia», tria nivell i espera que s'apaguin els llums.</p>
+
+    <!-- Tauler: les 24 caselles les crea el JavaScript -->
+    <section id="tauler" class="tauler" aria-label="Tauler de joc"></section>
+
+    <div class="botons">
+      <button id="btn-menu-joc" class="btn-secundari btn-menu-joc">← Menú</button>
+      <button id="btn-inici" class="btn-inici">Inicia</button>
+      <button id="btn-so" class="btn-so" aria-pressed="false" aria-label="Silencia els sons" title="Silencia els sons">🔊</button>
+    </div>
+  </main>
+
+  <!-- Finestra per triar el nivell (5 nivells) -->
+  <div id="modal-nivells" class="modal" hidden>
+    <div class="modal-caixa">
+      <h2>Tria el nivell</h2>
+      <div id="llista-nivells" class="llista-nivells"></div>
+      <button id="btn-cancelar" class="btn-secundari">Cancel·la</button>
+    </div>
+  </div>
+
+
+  <!-- Classificació dels 10 millors temps del nivell -->
+  <div id="modal-classificacio" class="modal" hidden>
+    <div class="modal-caixa modal-classificacio" role="dialog" aria-modal="true" aria-labelledby="titol-classificacio">
+      <h2 id="titol-classificacio">🏁 Classificació</h2>
+      <p id="resum-partida" class="resum-partida"></p>
+      <div class="taula-classificacio-wrap">
+        <table class="taula-classificacio">
+          <thead><tr><th>#</th><th>Temps</th><th>Intents</th></tr></thead>
+          <tbody id="llista-classificacio"></tbody>
+        </table>
+      </div>
+      <div id="logros-nous" class="logros-nous" hidden></div>
+      <button id="btn-tancar-classificacio" class="btn-inici">Continua</button>
+      <button id="btn-menu-final" class="btn-secundari">Menú principal</button>
+    </div>
+  </div>
+
+  <!-- Flaix lila que parpelleja quan es bat el rècord (Pole position) -->
+  <div id="flaix" class="flaix" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
